@@ -93,8 +93,7 @@ public class DroneOrder{
 				break;
 			}
 			}
-		 
-     }
+		 }
    
    /**
     * Calculate the number of promoters, neutral and detractors for the orders
@@ -141,16 +140,8 @@ public class DroneOrder{
 		  perDetractors=(float)((detractors*100)/totalOrder);
 	   }
 	   nps=(int)(perPromoters-perDetractors);
-	   /*System.out.println("NPS:"+nps);
-	   
-	   System.out.println("Promoters:"+promoters);
-	   System.out.println("Neutral:"+neutral);
-	   System.out.println("Detractors:"+detractors);
-	   System.out.println("TotalOrder:"+totalOrder);
-	   System.out.println("perPr:"+perPromoters);
-	   System.out.println("Final Order"+dp.orderDeliveryTime);*/
-	   
-   }
+	  
+	  }
    
    /**
     * Write order, delivered time and NPS to output file
@@ -163,7 +154,7 @@ public class DroneOrder{
    		String NPS="NPS:"+nps;
    		String path=filePath+"/output.txt";
    		File file = new File(path);
-   		//path=file.getAbsolutePath();
+   		
    		if(error==false) {
    			System.out.println("Output FilePath:"+ path);
    		}

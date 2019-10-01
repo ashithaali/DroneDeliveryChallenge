@@ -19,14 +19,16 @@ static String filePath;
     public static void main(String[] args){
     	ConfigurableApplicationContext context=SpringApplication.run(DroneChallengeApplication.class, args);
     	DroneOrder order=context.getBean(DroneOrder.class);
-    	
+    	if(filePath!=null) {
     	order.readOrderFile(filePath);
     	order.wareHouseCoords(n);
     	order.scheduleDrone();
     	order.getPromotersDetractors();
     	order.calculateNPS();
     	order.writeToOrderFile();
-    	
+    	}else {
+    		System.out.println("Invalid Input Command");
+    	}
     }
     
     @Override

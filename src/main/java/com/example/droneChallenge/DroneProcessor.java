@@ -44,9 +44,7 @@ for(int i=0;i<orderList.length;i++){
 	coords.add(tempOrder[1]);
 	orderTime.add(tempOrder[2]);
   }
-/*System.out.println("InputOrder:"+wmOrder);
-System.out.println("InputCoords:"+coords);
-System.out.println("InputOrderTime:"+orderTime);*/
+
 }
 
 /**
@@ -63,11 +61,9 @@ public int[] processOrder(int droneCurrentHour, int x, int y, int listIndex, Dat
 distanceIndex=listIndex;
 int index=0;
 int orderHour;
-
 String tempHour[];
 String currentCoordList[]= new String[coords.size()];
 int[] indexHour=new int[2];
-
 
 if(listIndex<=(coords.size()-1)) {
 orderDeliveryDate.setHours(droneCurrentHour);
@@ -93,7 +89,6 @@ while((orderHour<=droneCurrentHour)&&(listIndex<=(coords.size()-1))){
 	}
 	}
 getNearestCoords(currentCoordList,x,y,index);
-
 indexHour[0]=hour;
 indexHour[1]=listIndex;
 return indexHour;
@@ -121,46 +116,39 @@ public void getNearestCoords(String[] currentCoordList, int x, int y, int coordL
 	int distance;
 	
 	Map<Integer,Integer> distanceMap= new HashMap<>();
-	//System.out.println(coordListLen);
+
 	try {
-	for(int i=0;i<coordListLen;i++){
-	 temp=currentCoordList[i];	
-	 temp=temp.replace('N', ' ');
-	 temp=temp.replace('S', ' ');
-	 temp=temp.trim();
-	 temp=temp.replace('E', '-');
-	 temp=temp.replace('W', '-');
-	 tempCoord=temp.split("-");
+		for(int i=0;i<coordListLen;i++){
+			temp=currentCoordList[i];	
+			temp=temp.replace('N', ' ');
+			temp=temp.replace('S', ' ');
+			temp=temp.trim();
+			temp=temp.replace('E', '-');
+			temp=temp.replace('W', '-');
+			tempCoord=temp.split("-");
 	 
-	 x1=Integer.parseInt(tempCoord[0]);
-	 y1=Integer.parseInt(tempCoord[1]);
-	 
-	 if(x>=x1) {
-		 xDistance=x-x1;
-	 }
-	 else {
-		 xDistance=x1-x;
-	 }
-	 if(y>=y1) {
-		 yDistance=y-y1;
-	 }else {
-		 yDistance=y1-y;
-	 }
-	
-
-	 distance=xDistance+yDistance;
-	 
-	 distanceMap.put(distanceIndex, distance);
-
-	 distanceIndex=distanceIndex+1;
-	 
- }	
+		 x1=Integer.parseInt(tempCoord[0]);
+		 y1=Integer.parseInt(tempCoord[1]);
+		 
+		 if(x>=x1) {
+			 xDistance=x-x1;
+		 }
+		 else {
+			 xDistance=x1-x;
+		 }
+		 if(y>=y1) {
+			 yDistance=y-y1;
+		 }else {
+			 yDistance=y1-y;
+		 }
+		 distance=xDistance+yDistance;
+		 distanceMap.put(distanceIndex, distance);
+		 distanceIndex=distanceIndex+1;
+		 }	
 	}catch(Exception e) {
 		System.out.println("Invalid Coordinates");
 	}
-	
 	sortDistanceMap(distanceMap);
-	
 }
 
 /**
@@ -169,8 +157,7 @@ public void getNearestCoords(String[] currentCoordList, int x, int y, int coordL
  */
 
 public void sortDistanceMap(Map<Integer,Integer> distanceMap){
-	
-   List<Map.Entry<Integer,Integer>> list =
+  List<Map.Entry<Integer,Integer>> list =
             new LinkedList<Map.Entry<Integer, Integer> >(distanceMap.entrySet());
 	
 	
@@ -181,15 +168,14 @@ public void sortDistanceMap(Map<Integer,Integer> distanceMap){
           }
       }); 
 	  
-	 Map<Integer,Integer> sortedDistanceMap= new LinkedHashMap<>();
+  Map<Integer,Integer> sortedDistanceMap= new LinkedHashMap<>();
 	 int droneDeliveryTime=5;
 	 for (Map.Entry<Integer, Integer> entry : list) {
     	 sortedDistanceMap.put(entry.getKey(), entry.getValue());
     	 orderDelivery(entry.getKey(), entry.getValue(), droneDeliveryTime);
     	 droneDeliveryTime=droneDeliveryTime+5;
       }
-	 
-     }
+	}
 
 /**
  * Deliver to customer location and determine the delivery time
@@ -203,6 +189,7 @@ public void orderDelivery(int index, int distance, int droneDeliveryTime) {
   int sec=distance;
   String oDeliveryTime;
   String[] tempDate;
+  
   Calendar calendar = Calendar.getInstance();
   calendar.setTime(deliveryTime);
   calendar.add(Calendar.MINUTE, min);
@@ -217,8 +204,6 @@ public void orderDelivery(int index, int distance, int droneDeliveryTime) {
   orderDeliveryTime.add(oDeliveryTime);
   hour=oHr;
   }
-
-
 }
 
 
