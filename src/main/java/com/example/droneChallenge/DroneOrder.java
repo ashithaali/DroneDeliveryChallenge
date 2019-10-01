@@ -1,9 +1,13 @@
 package com.example.droneChallenge;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,6 +26,8 @@ public class DroneOrder{
 	int neutral=0;
 	int nps;
 	String filePath;
+	boolean error=false;
+	
 	@Autowired
 	DroneProcessor dp;
 	
@@ -33,14 +39,20 @@ public class DroneOrder{
 	public void readOrderFile(String filePath) {
 	String data;	
 	this.filePath=filePath;
+	try {
 	File file = new File(filePath);
 	String path=file.getAbsolutePath()+"/input.txt";
 	try (Stream<String> stream = Files.lines(Paths.get(path))){
 		 data = stream.collect(Collectors.joining("\n"));
 		 dp.getOrder(data);
 		 
-	  }catch(Exception e) {
-		System.out.println(e);
+	  }catch(IOException e) {
+		error=true; 
+		System.out.println("File Not Found");
+		}
+	}catch(Exception e) {
+		error=true; 
+		System.out.println("Invalid Input File Path");
 	}
    }
 	
@@ -50,11 +62,16 @@ public class DroneOrder{
 	 */
 	
 	public void wareHouseCoords(double n){
+		if(n>0) {
 		double tempCoords;
 		tempCoords=(n/2)+0.5;
 		x=(int)tempCoords;
 		y=x;
 		//System.out.println("Warehouse coords("+x+","+y+")");
+		}else {
+			error=true;
+			System.out.println("Invalid Grid Size");
+			}
 	}
 	
   /**
@@ -135,8 +152,41 @@ public class DroneOrder{
 	   
    }
    
-   public void writeToFile(){
-	   dp.writeToOrderFile(nps, filePath);
+   /**
+    * Write order, delivered time and NPS to output file
+    * @param nps
+    */
+
+   public void writeToOrderFile() {
+   	try {
+   		String data="";
+   		String NPS="NPS:"+nps;
+   		String path=filePath+"/output.txt";
+   		File file = new File(path);
+   		//path=file.getAbsolutePath();
+   		if(error==false) {
+   			System.out.println("Output FilePath:"+ path);
+   		}
+   		if (!file.exists()) {
+               file.createNewFile();
+           }
+   		
+   		FileWriter fw = new FileWriter(file.getAbsoluteFile());
+           BufferedWriter bw = new BufferedWriter(fw);
+           
+           Iterator<String> itr1=dp.orderDeliveryList.iterator();
+           Iterator<String> itr2=dp.orderDeliveryTime.iterator();
+           while(itr1.hasNext()&&itr2.hasNext()) {
+           	data=itr1.next()+" "+itr2.next();
+           	bw.write(data);
+           	bw.append('\n');
+           }
+           bw.write(NPS);
+           bw.close();
+   	}catch (IOException e) {
+   		   error=true;
+           System.out.println("Error occured while writing to output file, validate input file path");
+       }
    }
 }
 

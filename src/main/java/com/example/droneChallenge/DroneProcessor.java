@@ -1,15 +1,12 @@
 package com.example.droneChallenge;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -81,7 +78,7 @@ String tempDate=format.format(orderDeliveryDate);
 try {
 	deliveryTime=format.parse(tempDate);
 }catch(Exception e) {
-	
+	System.out.println("Invalid Order Time");
 }
 tempHour=orderTime.get(listIndex).split(":");
 orderHour=Integer.parseInt(tempHour[0]);
@@ -125,7 +122,8 @@ public void getNearestCoords(String[] currentCoordList, int x, int y, int coordL
 	
 	Map<Integer,Integer> distanceMap= new HashMap<>();
 	//System.out.println(coordListLen);
-	for(int i=0;i<coordListLen;i++) {
+	try {
+	for(int i=0;i<coordListLen;i++){
 	 temp=currentCoordList[i];	
 	 temp=temp.replace('N', ' ');
 	 temp=temp.replace('S', ' ');
@@ -148,16 +146,22 @@ public void getNearestCoords(String[] currentCoordList, int x, int y, int coordL
 	 }else {
 		 yDistance=y1-y;
 	 }
+	
+
 	 distance=xDistance+yDistance;
 	 
 	 distanceMap.put(distanceIndex, distance);
-	 
+
 	 distanceIndex=distanceIndex+1;
-	 }
+	 
+ }	
+	}catch(Exception e) {
+		System.out.println("Invalid Coordinates");
+	}
 	
 	sortDistanceMap(distanceMap);
 	
-  }
+}
 
 /**
  * Sorts the customer location in the order of smallest distance 
@@ -214,40 +218,7 @@ public void orderDelivery(int index, int distance, int droneDeliveryTime) {
   hour=oHr;
   }
 
-/**
- * Write order, delivered time and NPS to output file
- * @param nps
- */
 
-public void writeToOrderFile(int nps, String path) {
-	try {
-		String data="";
-		String NPS="NPS:"+nps;
-		path=path+"/output.txt";
-		File file = new File(path);
-		//path=file.getAbsolutePath();
-		System.out.println("Output FilePath:"+ path);
-		
-		if (!file.exists()) {
-            file.createNewFile();
-        }
-		
-		FileWriter fw = new FileWriter(file.getAbsoluteFile());
-        BufferedWriter bw = new BufferedWriter(fw);
-        
-        Iterator<String> itr1=orderDeliveryList.iterator();
-        Iterator<String> itr2=orderDeliveryTime.iterator();
-        while(itr1.hasNext()&&itr2.hasNext()) {
-        	data=itr1.next()+" "+itr2.next();
-        	bw.write(data);
-        	bw.append('\n');
-        }
-        bw.write(NPS);
-        bw.close();
-	}catch (Exception e) {
-        
-    }
-}
 }
 
 
