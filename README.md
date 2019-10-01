@@ -79,10 +79,18 @@ NPS= %Promoters -%Detractors
 
 With the above algorithm, an NPS of 100 was achieved for the sample input in the requirement.
 
-### Build Instructions
+###  Program Execution
 
 ```
+java -jar /target/droneChallenge-0.0.1-SNAPSHOT.jar -i --input=/tmp --n=51
 
+Arguements
+--input -> Filepath
+--n -> Grid Size
 ```
 
 ### Test Scenarios
+- Validate that the getorder method is reading order details as expected. It is done by checking order number and coordinates returned from the method matches the sample input values.
+- Test processOrder input parameters are valid. Order delivery date can not be null.
+- Validate drone schedule start time is 6 A.M.
+- Test wareHouse coordinate method calculates the dron launch facility as the center of the coordinates and the coordinates are equal.
